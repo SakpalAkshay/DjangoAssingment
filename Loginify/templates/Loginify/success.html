@@ -1,0 +1,10 @@
+{% extends "Loginify/base.html" %}
+{% block title %}Success | Loginify{% endblock %}
+{% block content %}
+<h1>You're in! 🎉</h1>
+<p class="sub">Login successful.</p>
+<p style="margin-bottom:20px;">Welcome, <strong>{{ username }}</strong>. You have logged in successfully.</p>
+<div class="links">
+    <a href="{% url 'login' %}">Back to login</a>
+</div>
+{% endblock %}

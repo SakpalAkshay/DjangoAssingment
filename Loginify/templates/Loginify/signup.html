@@ -1,0 +1,22 @@
+{% extends "Loginify/base.html" %}
+{% block title %}Sign Up | Loginify{% endblock %}
+{% block content %}
+<h1>Create account</h1>
+<p class="sub">Sign up to get started with Loginify.</p>
+<form method="post" action="{% url 'signup' %}">
+    {% csrf_token %}
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" placeholder="johndoe" required>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" placeholder="you@example.com" required>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" maxlength="12" placeholder="••••••••">
+
+    <button type="submit">Sign Up</button>
+</form>
+<div class="links">
+    Already have an account? <a href="{% url 'login' %}">Log in</a>
+</div>
+{% endblock %}
