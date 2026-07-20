@@ -1,145 +1,45 @@
-# DjangoProject — Django Login System
+# DjangoProject
 
-A Django project implementing user **signup, login, and profile management** with full **CRUD** operations, built for the ConsultAdd Django training assignment.
+This is my Django assignment project. It's a simple login system where users can sign up, log in, and I also added CRUD API endpoints that I tested with Postman.
 
-The project uses Django's built-in features for model creation, views, URL routing, and template rendering, and exposes JSON endpoints that can be tested with Postman.
+App name is `Loginify`, project name is `login_system`.
 
----
+## Model
 
-## Project structure
+UserDetails has:
+- username (primary key)
+- email (unique)
+- password (plain text, max 12 chars - just for this assignment)
+
+## How to run it
 
 ```
-DjangoProject/
-├── manage.py
-├── requirements.txt
-├── README.md
-├── login_system/            # Django project (settings, root URLs)
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py / asgi.py
-└── Loginify/                # Django app handling login functionality
-    ├── models.py            # UserDetails model
-    ├── views.py             # hello_world, signup, login + CRUD views
-    ├── urls.py              # app URL patterns
-    ├── admin.py             # UserDetails registered in admin
-    ├── migrations/
-    └── templates/Loginify/
-        ├── base.html
-        ├── signup.html
-        ├── login.html
-        └── success.html
+python -m venv DjangoAssignment
+DjangoAssignment\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
 ```
 
-- **Project name:** `login_system` (assignment: "Login System")
-- **App name:** `Loginify`
-- **Virtual environment:** `DjangoAssignment`
+Then go to http://127.0.0.1:8000/
 
----
+## Pages
 
-## The model — `UserDetails`
+- `/hello/` - just returns "Hello, world!" (test view)
+- `/signup/` - signup form
+- `/login/` - login form, redirects to a success page
 
-| Field    | Definition                                       |
-|----------|--------------------------------------------------|
-| username | `CharField(max_length=50, primary_key=True)`     |
-| email    | `EmailField(unique=True)`                         |
-| password | `CharField(max_length=12, blank=True)`            |
+## CRUD API (tested in Postman)
 
----
+- GET `/users/` - all users
+- GET `/users/<email>/` - one user
+- PUT `/users/<email>/update/` - update email/password
+- DELETE `/users/<email>/delete/` - delete user
 
-## Setup & run
-
-1. **Create and activate the virtual environment**
-   ```bash
-   python3 -m venv DjangoAssignment
-   source DjangoAssignment/bin/activate      # Windows: DjangoAssignment\Scripts\activate
-   ```
-
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Apply migrations**
-   ```bash
-   python manage.py makemigrations
-   python manage.py migrate
-   ```
-
-4. **Create a superuser** (Task 4)
-   ```bash
-   python manage.py createsuperuser
-   ```
-
-5. **Run the development server**
-   ```bash
-   python manage.py runserver
-   ```
-   Visit `http://127.0.0.1:8000/`.
-
----
-
-## Endpoints
-
-### Pages & auth (HTML templates)
-
-| Method | URL          | Description                                                        |
-|--------|--------------|-------------------------------------------------------------------|
-| GET    | `/hello/`    | Returns plain text `Hello, world!` (Task 2 test view)             |
-| GET    | `/signup/`   | Renders the signup form                                            |
-| POST   | `/signup/`   | Registers a user; on success **redirects to `/login/`**           |
-| GET    | `/login/`    | Renders the login form                                            |
-| POST   | `/login/`    | Authenticates by email + password; on success shows success page  |
-
-### CRUD API (JSON — test with Postman) (Task 5)
-
-| Method | URL                              | Description                              |
-|--------|----------------------------------|------------------------------------------|
-| GET    | `/users/`                        | **Read all** — list every user           |
-| GET    | `/users/<email>/`                | **Read one** — get a user by email        |
-| PUT    | `/users/<email>/update/`         | **Update** — change email and/or password |
-| DELETE | `/users/<email>/delete/`         | **Delete** — remove a user by email       |
-
-The `signup` and `login` views accept **both** HTML form posts (from the templates) and raw JSON bodies (from Postman). Send JSON with header `Content-Type: application/json`.
-
----
-
-## Testing with Postman
-
-**Create a user (JSON signup)**
-```
-POST http://127.0.0.1:8000/signup/
-Content-Type: application/json
-
-{ "username": "alice", "email": "alice@example.com", "password": "alicepw" }
-```
-
-**Read all users**
-```
-GET http://127.0.0.1:8000/users/
-```
-
-**Update a user**
-```
-PUT http://127.0.0.1:8000/users/alice@example.com/update/
-Content-Type: application/json
-
-{ "password": "newpw123", "email": "alice.new@example.com" }
-```
-
-**Delete a user**
-```
-DELETE http://127.0.0.1:8000/users/alice.new@example.com/delete/
-```
-
----
+Signup/login views accept normal form posts and also JSON (for Postman), just set the Content-Type header to application/json.
 
 ## Notes
 
-- Passwords are stored as plain text per the assignment's model spec (`max_length=12`). This is for learning purposes only and is **not** suitable for production — use Django's `auth` system and password hashing for real applications.
-- `csrf_exempt` is applied to the auth/CRUD views so they can be exercised directly from Postman. In a browser-only app you would keep CSRF protection enabled and rely on the `{% csrf_token %}` already present in the templates.
-
----
-
-## Screenshots
-
-_Add screenshots of the rendered templates and Postman responses here (assignment instruction 3)._
+- Passwords are stored as plain text right now, I know that's bad practice but it's what the assignment model asks for. Would use Django's auth system + hashing for a real app.
+- CSRF is turned off on these views so Postman can hit them directly.
