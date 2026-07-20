@@ -18,9 +18,5 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(max_length=254, unique=True)),
                 ('password', models.CharField(blank=True, max_length=12)),
             ],
-            options={
-                'verbose_name': 'User Detail',
-                'verbose_name_plural': 'User Details',
-            },
         ),
     ]
